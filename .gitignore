@@ -146,7 +146,6 @@ Thumbs.db
 
 # Data files (specific to this project)
 *.json
-!document_collection.json
-!test_queries.json
-!test_qrels.json
-!test_query_answers.json
+
+# Virtual environment for this project - Brando
+Irs_env/
