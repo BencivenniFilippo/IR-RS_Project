@@ -16,8 +16,8 @@ class BaselineExperiments():
         self.base_index_path = base_index_path
         self.keywords_index_path = keywords_index_path
         self.queries_expanded = False
-        self.keywords_index = None
         self.load_base_index()
+        self.load_keywords_index()
         self.load_queries()
         self.load_qrels()
 
@@ -39,9 +39,8 @@ class BaselineExperiments():
             self.qrels.rename(columns={"query_id": "qid", "para_id": "docno"}, inplace=True)
     
     
-    
-    def load_keywords_index(self, keywords_index_path):
-        index_abs_path = os.path.abspath(keywords_index_path)
+    def load_keywords_index(self):
+        index_abs_path = os.path.abspath(self.keywords_index_path)
         self.keywords_index = pt.IndexFactory.of(index_abs_path)
     
     def thesaurus_query_expansion(self, queries: pd.DataFrame) -> pd.DataFrame:
@@ -114,5 +113,6 @@ class BaselineExperiments():
         print("Experiment 3 results (expanded queries):\n", experiment3_results_b)
 
 be = BaselineExperiments("test_queries.json", "test_qrels.json")
-be.run_experiment_1()
-be.run_experiment_2()
+#be.run_experiment_1()
+#be.run_experiment_2()
+be.run_experiment_3()
