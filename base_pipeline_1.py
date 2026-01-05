@@ -35,6 +35,9 @@ index = pt.IndexFactory.of(index_path)
 
 bm25 = pt.terrier.Retriever(index, wmodel="BM25")
 rm3_pipe_bm25 = bm25 >> pt.rewrite.RM3(index) >> bm25
+Bo1_pipe_bm25 = bm25 >> pt.rewrite.Bo1QueryExpansion(index) >> bm25
+KL_pipe_bm25 = bm25 >> pt.rewrite.KLQueryExpansion(index) >> bm25
+
 
 tfidf = pt.terrier.Retriever(index, wmodel="TF_IDF")
 rm3_pipe_tfidf = tfidf >> pt.rewrite.RM3(index) >> tfidf
@@ -48,9 +51,18 @@ resultsbm25 = pt.Experiment(
 print(resultsbm25)
 
 resultstfidf = pt.Experiment(
-    [bm25, rm3_pipe_tfidf],
+    [tfidf, rm3_pipe_tfidf],
     test_queries_small,
     test_qrels,
     ["map", AP@1000,P@5,P@10]
     )
 print(resultstfidf)
+
+
+resultsKLBo1 = pt.Experiment(
+    [Bo1_pipe_bm25, KL_pipe_bm25],
+    test_queries_small,
+    test_qrels,
+    ["map", AP@1000,P@5,P@10]
+    )
+print(resultsKLBo1)

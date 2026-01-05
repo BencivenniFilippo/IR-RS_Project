@@ -9,34 +9,35 @@ from keybert import KeyBERT
 from nltk.wsd import lesk
 from nltk import word_tokenize
 
-def keywords_extraction_RAKE(text: str, n: int) -> list[str]:
+def keywords_extraction_RAKE(text: str, max_keywords: int) -> list[str]:
+    #NOTE here there are much more keywords being extracted
     r = Rake()
     r.extract_keywords_from_text(text)
-    phrases = r.get_ranked_phrases()[:n]
+    phrases = r.get_ranked_phrases()[:max_keywords]
     words = set()
     for phrase in phrases:
         for word in phrase.split():
             words.add(word.lower())
     return list(words)
 
-def keywords_extraction_BERT(text: str, n: int) -> list[str]:
+def keywords_extraction_BERT(text: str, max_keywords: int) -> list[str]:
     kwBert = KeyBERT()
-    keywords = kwBert.extract_keywords(text, keyphrase_ngram_range=(1, 1), stop_words='english', top_n=n)
+    keywords = kwBert.extract_keywords(text, keyphrase_ngram_range=(1, 1), stop_words='english', top_n=max_keywords)
     kw = []
     for k in keywords:
         kw.append(k[0])
     return kw
 
-def keywords_extractor(text: str, n=3, method='rake') -> list[str]:
+def keywords_extractor(text: str, max_keywords=3, method='rake') -> list[str]:
     if method not in ['rake', 'bert']:
         raise ValueError("Method must be either 'rake' or 'bert'")
     
     if method == 'rake':
-        keywords = keywords_extraction_RAKE(text, n)
+        keywords = keywords_extraction_RAKE(text, max_keywords)
         return keywords
     
     if method == 'bert':
-        keywords = keywords_extraction_BERT(text, n)
+        keywords = keywords_extraction_BERT(text, max_keywords)
         return keywords
 
 def thesaurus_based_expansion(text: str, keywords: list[str], max_synonyms_per_keyword=2) -> list[str]:

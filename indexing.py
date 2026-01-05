@@ -16,7 +16,7 @@ df = pd.DataFrame.from_dict(data)
 # Prepare dataframe for PyTerrier: needs columns 'docno' and 'text'
 corpus_dataframe = df.rename(columns={"para_id": "docno", "context": "text"})[["docno", "text"]]
 longest_len = corpus_dataframe["docno"].str.len().max()
-
+print(corpus_dataframe["docno"])
 
 # Create or reset an index folder
 index_path = os.path.abspath("terrier_index")  # absolute path
@@ -37,6 +37,8 @@ indexer = pt.IterDictIndexer(
     fields=False,
     threads=1, 
 )
+
+
 
 #perform the indexing and assign 
 index_ref = indexer.index(corpus_dataframe.to_dict(orient="records"))
