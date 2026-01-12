@@ -62,3 +62,16 @@ def thesaurus_based_expansion(text: str, keywords: list[str], max_synonyms_per_k
             expanded_keywords.append(kw)
     
     return expanded_keywords
+
+class TokenizerWrapper:
+    # Tokenizer that actually works with py.sliding
+    def __init__(self, tok):
+        self.tok = tok
+
+    def tokenize(self, s: str):
+        return self.tok.tokenize(s)
+
+    def convert_tokens_to_string(self, tokens):
+        # PyTerrier may pass a tuple;
+        # T5Tokenizer expects something mutable
+        return self.tok.convert_tokens_to_string(list(tokens))
