@@ -1,15 +1,10 @@
-import nltk
+# import nltk
 # nltk.download('punkt')
 # nltk.download('wordnet')
 # nltk.download('stopwords')
 
-from rake_nltk import Rake
-from keybert import KeyBERT
-
-from nltk.wsd import lesk
-from nltk import word_tokenize
-
 def keywords_extraction_RAKE(text: str, max_keywords: int) -> list[str]:
+    from rake_nltk import Rake
     r = Rake()
     r.extract_keywords_from_text(text)
     phrases = r.get_ranked_phrases()
@@ -24,6 +19,7 @@ def keywords_extraction_RAKE(text: str, max_keywords: int) -> list[str]:
     return list(words)
 
 def keywords_extraction_BERT(text: str, max_keywords: int) -> list[str]:
+    from keybert import KeyBERT
     kwBert = KeyBERT()
     keywords = kwBert.extract_keywords(text, keyphrase_ngram_range=(1, 1), stop_words='english', top_n=max_keywords)
     kw = []
@@ -44,6 +40,9 @@ def keywords_extractor(text: str, max_keywords=3, method='rake') -> list[str]:
         return keywords
 
 def thesaurus_based_expansion(text: str, keywords: list[str], max_synonyms_per_keyword=2) -> list[str]:
+    from nltk.wsd import lesk
+    from nltk import word_tokenize
+
     expanded_keywords = []
     for kw in keywords:
         synset = lesk(word_tokenize(text), kw)

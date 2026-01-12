@@ -152,3 +152,6 @@ Irs_env/
 
 # Pyterrier indexes
 terrier_index/
+
+# Indexes files
+indexes
